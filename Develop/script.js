@@ -9,14 +9,15 @@ function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
   passwordText.value = password;
+}
 
-  function generatePassword() {
+function generatePassword() {
     
     getPasswordLength();
     getPasswordCriteria();
 
     function getPasswordLength() {
-      var passwordLength = parseInt(prompt("Enter length of password"));
+      passwordLength = parseInt(prompt("Enter length of password"));
       
       if(!Number.isInteger(passwordLength)) { //means if "passwordLength is not an "Integer" (i.e. a number);
       alert("Enter an Integer");
@@ -25,13 +26,13 @@ function writePassword() {
       } else if(passwordLength < 8 || passwordLength > 128) {
       alert("Password needs to be between 8 and 128 characters");
       getPasswordLength();
-      }
+      };
     
-    }
+    };
 
     function getPasswordCriteria() {
       
-      var criteriaCount = 0;
+      let criteriaCount = 0;
 
       lowercase = confirm("Do you want lowercase letters?");
       if(lowercase) {
@@ -56,12 +57,9 @@ function writePassword() {
       if(criteriaCount < 1) {
       alert("You must select at least 1 criterium");
       getPasswordCriteria();
-      }
+      } 
       
-      
-    }
-    
-  }
+    };
 
   let genPassword = [];
   let lowerCaseArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
@@ -80,13 +78,13 @@ function writePassword() {
   //} else if(lowercase && uppercase && specialCharacters) {
    // criteriaArray = lowerCaseArray.concat(upperCaseArray, specialCharactersArray);
     
-  } else if (lowercase && specialCharacters) {
+  } else if(lowercase && specialCharacters) {
     criteriaArray = lowerCaseArray.concat(specialCharactersArray);
 
   } else if(lowercase && uppercase) {
       criteriaArray = lowerCaseArray.concat(upperCaseArray);
   
-  } else if (lowercase) {
+  } else if(lowercase) {
       criteriaArray = lowerCaseArray;
 
   } else if(uppercase && numericCharacters) {
@@ -111,11 +109,11 @@ function writePassword() {
   criteriaArray.sort(() => Math.random() - 0.5);
   genPassword = criteriaArray.join('');
 
-  console.log(typeof (genPassword));
+  //console.log(genPassword.slice(0, passwordLength));
 
-  return genPassword;
+  return genPassword.slice(0, passwordLength);
+
 }
 
-
-// Add event listener to generate button
+// // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
