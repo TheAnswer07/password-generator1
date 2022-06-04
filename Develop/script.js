@@ -1,117 +1,92 @@
 // Assignment code here
 
-
 // Get references to the #generate element
-var generateBtn = document.querySelector("#generate");
+const generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
+  let password = getPassword();
+  let passwordText = document.querySelector("#password");
   passwordText.value = password;
 }
 
-function generatePassword() {
+//getPasswordLen asks the user to specify the length of the password
+//if the password is not an int it will throw an alert and call the function again
+//if the length is less than 8 or greater than 128 it will throw an alert and call the function again
+//it returns the length of the password which is an int
+
+const getPasswordLen = () => {
+  let len = +prompt("how long would you like your password")
+   if (isNaN(len)){
+    alert("Please use an int")
+    return getPasswordLen()
+   }
+
+   if (len < 8 || len > 128) {
+     alert("Please make sure the length is between 8 and 128")
+    return getPasswordLen()
+   }
+   return len
+ };
+ 
+ const getUserChoices = () => {  
+   const lowerChoice = confirm("Would you like to use lower case?")
+   const upperChoice = confirm("would you like to use uppercase?")
+   const specialChoice = confirm("would you like to use special Character?")
+   const numChoice = confirm("would you like to use numbers?")
+ 
+   const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+   const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   const numbers = "1234567890"
+   const specialChar = "!@#$%^&*()+_?<>:;'{}[]`~`'\|"
+   
+  //Here what we're doing is checking if "lowerChoice" is true. If it's the case,
+  //lower is set to lowerChoice. If it's false, lower is set to an empty ""."
+
+   return {
+     lower: lowerChoice ? lowerCase : '',
+     upper: upperChoice ? upperCase : '',
+     numbers: numChoice ? numbers : '',
+     specialChar: specialChoice? specialChar : '' 
+   }
+ }
+ 
+ //createValsFromChoices takes object as an argument, loops throught the object
+ // and then combines the values of the object into 1 string.
+ // returns a string
+
+ const createValsFromChoices = (obj) => {
+   let res = ''
+   for (let i in obj) {
+   res = res + obj[i]
+ }
+   return res
+ }
+ 
+  //vals is a string 
+ //passwordLen is an int
+ //generatePassword while the length of the result is less than the password length
+ //we will randomly select an charachter from vals and assign it to the result
+ //this returns a string
+
+ const generatePassword = (vals, passwordLen) => {
+   let res = ''
+   while (res.length < passwordLen) {
+   res = res + vals[Math.floor(Math.random() * vals.length)]
+ }
+   return res
+ }
+
+function getPassword() {
     
-    getPasswordLength();
-    getPasswordCriteria();
+  let len = getPasswordLen()
+ 
+  const choices = getUserChoices()
 
-    function getPasswordLength() {
-      passwordLength = parseInt(prompt("Enter length of password"));
-      
-      if(!Number.isInteger(passwordLength)) { //means if "passwordLength is not an "Integer" (i.e. a number);
-      alert("Enter an Integer");
-      getPasswordLength();
+  let vals = createValsFromChoices(choices)
 
-      } else if(passwordLength < 8 || passwordLength > 128) {
-      alert("Password needs to be between 8 and 128 characters");
-      getPasswordLength();
-      };
-    
-    };
-
-    function getPasswordCriteria() {
-      
-      let criteriaCount = 0;
-
-      lowercase = confirm("Do you want lowercase letters?");
-      if(lowercase) {
-        criteriaCount += 1;
-      }
-
-      uppercase = confirm("Do you want uppercase letters?");
-      if(uppercase) {
-        criteriaCount += 1;
-      }
-
-      numericCharacters = confirm("Do you want numeric characters?");
-      if(numericCharacters) {
-        criteriaCount += 1;
-      }
-
-      specialCharacters = confirm("Do you want special charaters?");
-      if(specialCharacters) {
-        criteriaCount += 1;
-      }
-
-      if(criteriaCount < 1) {
-      alert("You must select at least 1 criterium");
-      getPasswordCriteria();
-      } 
-      
-    };
-
-  let genPassword = [];
-  let lowerCaseArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-  let upperCaseArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-  let numericCharactersArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  let specialCharactersArray = ['!', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '^', ']', '_', '`', '{', '|', '~', '}'];
-
-  let criteriaArray = [];
-
-  if(lowercase && uppercase && numericCharacters && specialCharacters) {
-  criteriaArray = lowerCaseArray.concat(upperCaseArray, numericCharactersArray, specialCharactersArray);
-
-  } else if(lowercase && uppercase && numericCharacters) {
-    criteriaArray = lowerCaseArray.concat(upperCaseArray, numericCharactersArray);
-    
-  //} else if(lowercase && uppercase && specialCharacters) {
-   // criteriaArray = lowerCaseArray.concat(upperCaseArray, specialCharactersArray);
-    
-  } else if(lowercase && specialCharacters) {
-    criteriaArray = lowerCaseArray.concat(specialCharactersArray);
-
-  } else if(lowercase && uppercase) {
-      criteriaArray = lowerCaseArray.concat(upperCaseArray);
+  return generatePassword(vals, len)
   
-  } else if(lowercase) {
-      criteriaArray = lowerCaseArray;
-
-  } else if(uppercase && numericCharacters) {
-      criteriaArray = upperCaseArray.concat(numericCharacters);
-  
-  } else if(uppercase && specialCharactersArray) {
-      criteriaArray = upperCaseArray.concat(specialCharactersArray);
-  
-  } else if(uppercase) {
-      criteriaArray = upperCaseArray;
-
-  } else if(numericCharacters && specialCharactersArray) {
-      criteriaArray = numericCharactersArray.concat(specialCharactersArray);
-
-  } else if(numericCharacters) {
-      criteriaArray = numericCharactersArray;
-
-  } else {
-      criteriaArray = specialCharactersArray;
-  }
-
-  criteriaArray.sort(() => Math.random() - 0.5);
-  genPassword = criteriaArray.join('');
-
-  //console.log(genPassword.slice(0, passwordLength));
-
-  return genPassword.slice(0, passwordLength);
 }
 
 // // Add event listener to generate button
