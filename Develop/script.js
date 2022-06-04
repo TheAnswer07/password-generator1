@@ -112,7 +112,6 @@ function generatePassword() {
   //console.log(genPassword.slice(0, passwordLength));
 
   return genPassword.slice(0, passwordLength);
-
 }
 
 // // Add event listener to generate button
